@@ -1,5 +1,20 @@
 import { port, server } from './app.mjs';
 
+async function catchProcessDeath() {
+  debug('urk...');
+  await NotesStore.close();
+  await server.close();
+  process.exit(0);
+}
+
+process.on('SIGTERM', catchProcessDeath);
+process.on('SIGINT', catchProcessDeath);
+process.on('SIGHUP', catchProcessDeath);
+
+process.on('exit', () => {
+    debug('exiting...');
+});
+
 export function normalisePort(val) {
     const port = parseInt(val, 10);
     if (isNaN(port)) { 
@@ -28,6 +43,10 @@ export function onError(error) {
         console.error(bind + ' is already in use');
         process.exit(1);
         break;
+      case 'ENOTESSTORE':
+          console.error(`Notes data store initialization failure because`, error.error);
+          process.exit(1);
+          break;
       default:
         throw error;
     }
@@ -61,3 +80,14 @@ export function basicErrorHandler(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 }
+
+process.on('uncaughtException', function(err) {
+  console.error(`I've crashed!!! - ${(err.stack || err)}`);
+});
+
+import * as util from 'util';
+import { debug } from 'console';
+import { NotesStore } from './models/notes-store.mjs';
+process.on('unhandledRejection', (reason, p)=> {
+  console.error(`Unhandled Rejection at: ${util.inspect(p)} reason: ${reason}`);
+})

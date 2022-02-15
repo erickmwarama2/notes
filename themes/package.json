@@ -1,0 +1,14 @@
+{
+    "scripts": {
+        "download": "wget -O - https://github.com/twbs/bootstrap/archive/refs/tags/v5.1.3.tar.gz | tar xvfz -",
+        "postdownload": "cd bootstrap-5.1.3 && npm install",
+        "clean": "rm -rf bootstrap-5.1.3",
+        "build": "cd bootstrap-5.1.3 && npm run dist",
+        "watch": "cd bootstrap-5.1.3 && npm run watch",
+        "prebuild": "cp _custom.scss bootstrap.scss bootstrap-5.1.3/scss",
+        "postbuild": "mkdir -p dist && cp -r bootstrap-5.1.3/dist .",
+        "dl-minty": "mkdir -p minty && npm run dl-minty-css && npm run dl-minty-min-css",
+        "dl-minty-css":"wget https://bootswatch.com/4/minty/bootstrap.css -O minty/bootstrap.css",
+        "dl-minty-min-css":"wget https://bootswatch.com/4/minty/bootstrap.min.css -O minty/bootstrap.min.css"
+    }
+}

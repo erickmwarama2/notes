@@ -1,9 +1,15 @@
 import { default as express } from 'express';
-import { NotesStore as notes } from '../app.mjs';
+// import { NotesStore as notes } from '../app.mjs';
+import { NotesStore as notes } from '../models/notes-store.mjs';
+import { default as DBG } from 'debug';
 
 export const router = express.Router();
 
+const debug = DBG('notes:debug');
+const dbgerror = DBG('notes:error');
+
 router.get('/add', (req, res, next) => {
+    debug('called notes/add endpoint');
     res.render('noteedit', {
         title: "Add a Note",
         docreate: true,
@@ -52,6 +58,7 @@ router.get('/destroy', async (req, res, next)=>{
 });
 
 router.get('/edit', async (req, res, next) => {
+    debug('called notes/edit endpoint');
     try{
         let note = await notes.read(req.query.key);
         res.render('noteedit', {

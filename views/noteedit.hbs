@@ -1,20 +1,62 @@
-<form method='POST' action='/notes/save' autocomplete="off"> 
+<form method="POST" action="/notes/save">
+    <div class="container">
+        {{#if docreate}}
+        <input type="hidden" name="docreate" value="create">
+        {{else}}
+        <input type="hidden" name="docreate" value="update">
+        {{/if}}
+
+        <div class="mb-3 row">
+            <label for="notekey" class="col-1 form-label">Key</label>
+            {{#if docreate}}
+            <div class="col">
+                <input type="text" class="form-control" placeholder="note key" name="notekey" value="" />
+            </div>
+            {{else}}
+            {{#if note}}
+            {{!-- <span class="input-group-text col">{{notekey}}</span> --}}
+            <div class="col">
+                <input type="text" value="{{notekey}}" class="form-control" disabled readonly>
+            </div>
+            {{/if}}
+            <input type="hidden" name="notekey" value="{{#if notekey}}{{notekey}}{{/if}}" />
+            {{/if}}
+        </div>
+
+
+        <div class="mb-3 row">
+            <label for="title" class="col-1 form-label">Title</label>
+            <div class="col">
+                <input type="text" class="form-control" id="title" name="notetitle" placeholder="note title"
+                    value="{{#if note}}{{note.title}}{{/if}}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <textarea class="form-control" name="body" rows="3">
+            {{#if note}}{{note.body}}{{/if}}
+            </textarea>
+        </div>
+        <button type="submit" class="btn btn-default btn-outline-dark">Submit</button>
+    </div>
+</form>
+
+
+{{!-- <form method='POST' action='/notes/save' autocomplete="off">
     <input type='hidden' name='docreate' value='<%=docreate ? "create" : "update"%>'>
     <p>Key:
         {{#if docreate }}
-        <input type='text' name='notekey' value=''/>
+        <input type='text' name='notekey' value='' />
         {{else}}
-            {{#if note}}{{notekey}}{{/if}}
-            <input type='hidden' name='notekey' 
-            value='{{#if note}}{{notekey}}{{/if}}'/>
+        {{#if note}}{{notekey}}{{/if}}
+        <input type='hidden' name='notekey' value='{{#if note}}{{notekey}}{{/if}}' />
         {{/if}}
     </p>
-    <p>Title: <input type='text' name='notetitle'
-    value='{{#if note}}{{note.title}}{{/if}}'/></p>
-    <br/>
+    <p>Title: <input type='text' name='notetitle' value='{{#if note}}{{note.title}}{{/if}}' /></p>
+    <br />
     <textarea rows=5 cols=40 name='body'>
         {{#if note}}{{note.body}}{{/if}}
     </textarea>
-    <br/>
+    <br />
     <input type='submit' value='Submit' />
-</form>
+</form> --}}
